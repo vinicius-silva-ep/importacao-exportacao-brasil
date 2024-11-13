@@ -13,6 +13,5 @@ create table if not exists imp_exp_br.cgce (
     NO_CGCE_N1 text,
     NO_CGCE_N1_ING text,
     NO_CGCE_N1_ESP text,
-    data_criacao TIMESTAMP default CURRENT_TIMESTAMP,
-    data_modificacao TIMESTAMP default CURRENT_TIMESTAMP
+    data_criacao TIMESTAMP default CURRENT_TIMESTAMP
 );

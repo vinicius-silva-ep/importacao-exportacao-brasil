@@ -32,26 +32,26 @@ def db_operations():
             password=DB_PASSWORD,
         )
 
-        print("Connection to the database successfully established!")
+        print("Conexão com o banco realizada com sucesso!")
         cursor = connection.cursor()
 
         cursor.execute(read_sql_file(verify_schema))
         if not cursor.fetchone():
             cursor.execute(read_sql_file(create_schema))
             connection.commit()
-            print("Schema 'violins' created successfully.")
+            print("Schema 'imp_exp_br' criado com sucesso.")
 
         cursor.execute(read_sql_file(verify_table_cgce))
         if not cursor.fetchone()[0]:
             cursor.execute(read_sql_file(create_table_cgce))
             connection.commit()
-            print("Table 'violins_data' created successfully.")
+            print("Tabela 'cgce' criado com sucesso.")
 
         cursor.close()
         connection.close()
 
     except Exception as e:
-        print(f"Error connecting to database: {e}")
+        print(f"Erro ao se conectar com o banco: {e}")
 
 
 db_operations()

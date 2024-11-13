@@ -1,12 +1,16 @@
 import pandas as pd
 import os
+from datetime import datetime
 
 
 def load_excel_sheet(file_path, sheet_name):
+    """Carrega uma planilha específica em um DataFrame."""
     if os.path.exists(file_path):
         try:
-            # Carrega a sheet específica em um DataFrame
             df = pd.read_excel(file_path, sheet_name=sheet_name)
+            df["data_criacao"] = datetime.now().strftime(
+                "%Y-%m-%d %H:%M:%S"
+            )  # Date format by ISO 8601 compatible with PostgreSQL
             print(f"Planilha '{sheet_name}' carregada com sucesso.")
             return df
         except ValueError:
@@ -17,39 +21,14 @@ def load_excel_sheet(file_path, sheet_name):
         return None
 
 
-if __name__ == "__main__":
+def transform_data():
+    """Carrega planilhas específicas de um arquivo Excel e as armazena em DataFrames."""
     # Define o caminho do arquivo
     file_path = os.path.join("data", "TABELAS_AUXILIARES.xlsx")
 
-    # Dataframe aux_CGCE
-    if os.path.exists(file_path):
-        try:
-            df_isic_grupo = pd.read_excel(file_path, sheet_name="3")
-            print("Planilha '3' carregada com sucesso.")
-            print(df_isic_grupo)
-        except ValueError:
-            print("A planilha '3' não existe no arquivo.")
-    else:
-        print(f"O arquivo {file_path} não foi encontrado.")
+    # Dataframes a serem carregados
+    df_cgce = load_excel_sheet(file_path, sheet_name="3")
+    df_isic = load_excel_sheet(file_path, sheet_name="4")
+    df_isic_grupo = load_excel_sheet(file_path, sheet_name="16")
 
-    # Dataframe aux_ISIC
-    if os.path.exists(file_path):
-        try:
-            df_isic = pd.read_excel(file_path, sheet_name="4")
-            print("Planilha '4' carregada com sucesso.")
-            print(df_isic)
-        except ValueError:
-            print("A planilha '4' não existe no arquivo.")
-    else:
-        print(f"O arquivo {file_path} não foi encontrado.")
-
-    # Dataframe aux_ISIC_GRUPO
-    if os.path.exists(file_path):
-        try:
-            df_isic_grupo = pd.read_excel(file_path, sheet_name="16")
-            print("Planilha '16' carregada com sucesso.")
-            print(df_isic_grupo)
-        except ValueError:
-            print("A planilha '16' não existe no arquivo.")
-    else:
-        print(f"O arquivo {file_path} não foi encontrado.")
+    return df_cgce, df_isic, df_isic_grupo
