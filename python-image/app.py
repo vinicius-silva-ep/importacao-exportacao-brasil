@@ -1,1 +1,0 @@
-print("Primeira imagem.")
