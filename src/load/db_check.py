@@ -18,8 +18,8 @@ def read_sql_file(file_path):
 
 verify_schema = os.path.join(db_path, "verify_schema.sql")
 create_schema = os.path.join(db_path, "create_schema.sql")
-verify_table_cgce = os.path.join(db_path, "verify_table_cgce.sql")
-create_table_cgce = os.path.join(db_path, "create_table_cgce.sql")
+verify_tables = os.path.join(db_path, "verify_tables.sql")
+create_tables = os.path.join(db_path, "create_tables.sql")
 
 
 def db_operations():
@@ -41,11 +41,11 @@ def db_operations():
             connection.commit()
             print("Schema 'imp_exp_br' criado com sucesso.")
 
-        cursor.execute(read_sql_file(verify_table_cgce))
+        cursor.execute(read_sql_file(verify_tables))
         if not cursor.fetchone()[0]:
-            cursor.execute(read_sql_file(create_table_cgce))
+            cursor.execute(read_sql_file(create_tables))
             connection.commit()
-            print("Tabela 'cgce' criado com sucesso.")
+            print("Tabelas criadas com sucesso.")
 
         cursor.close()
         connection.close()
