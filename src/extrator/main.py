@@ -20,7 +20,7 @@ def download_file(url, save_directory="data"):
         )
 
 
-if __name__ == "__main__":
+def extrator():
     # Lista de URLs para download
     urls = [
         "https://balanca.economia.gov.br/balanca/bd/tabelas/TABELAS_AUXILIARES.xlsx",

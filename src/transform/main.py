@@ -4,7 +4,7 @@ from datetime import datetime
 
 
 def load_excel_sheet(file_path, sheet_name):
-    """Carrega uma planilha específica em um DataFrame."""
+    # Carrega uma planilha específica em um DataFrame.
     if os.path.exists(file_path):
         try:
             df = pd.read_excel(file_path, sheet_name=sheet_name)
@@ -15,7 +15,6 @@ def load_excel_sheet(file_path, sheet_name):
                 str
             )  # Converte todas as colunas para string, para que eu não precise ficar selecionando uma a uma
             df["data_criacao"] = datetime.now()
-            print(f"Planilha '{sheet_name}' carregada com sucesso.")
             return df
         except ValueError:
             print(f"A planilha '{sheet_name}' não existe no arquivo.")
