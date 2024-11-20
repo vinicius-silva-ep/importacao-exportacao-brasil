@@ -52,6 +52,3 @@ def db_operations():
 
     except Exception as e:
         print(f"Erro ao se conectar com o banco: {e}")
-
-
-db_operations()

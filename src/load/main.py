@@ -8,6 +8,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from config import DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASSWORD, DB_SCHEMA
 from transform.main import transform_data
+from db_check import db_operations
 
 
 pwd = DB_PASSWORD
@@ -34,4 +35,5 @@ def load_and_insert_data():
     print("Dados inseridos")
 
 
+db_operations()
 load_and_insert_data()

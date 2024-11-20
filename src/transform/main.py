@@ -8,9 +8,13 @@ def load_excel_sheet(file_path, sheet_name):
     if os.path.exists(file_path):
         try:
             df = pd.read_excel(file_path, sheet_name=sheet_name)
-            df["data_criacao"] = datetime.now().strftime(
-                "%Y-%m-%d %H:%M:%S"
-            )  # Date format by ISO 8601 compatible with PostgreSQL
+            df.columns = (
+                df.columns.str.lower()
+            )  # Renomeia todas as colunas para minúsculas por conta do Postgres e o sqlalchemy
+            df = df.astype(
+                str
+            )  # Converte todas as colunas para string, para que eu não precise ficar selecionando uma a uma
+            df["data_criacao"] = datetime.now()
             print(f"Planilha '{sheet_name}' carregada com sucesso.")
             return df
         except ValueError:
@@ -22,7 +26,7 @@ def load_excel_sheet(file_path, sheet_name):
 
 
 def transform_data():
-    """Carrega planilhas específicas de um arquivo Excel e as armazena em DataFrames."""
+    # Carrega planilhas específicas de um arquivo Excel e as armazena em DataFrames.
     # Define o caminho do arquivo
     file_path = os.path.join("data", "TABELAS_AUXILIARES.xlsx")
 
