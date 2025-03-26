@@ -1,6 +1,14 @@
 import os
 import requests
+from logger import setup_logger
 
+# Inicializa o logger
+logger = setup_logger()
+
+logger.info(
+    f"teste 123",
+    extra={"tabela": "teste", "etapa": "extração"},
+)
 
 def download_file(url, save_directory="data"):
     # Extrai o nome do arquivo da URL
