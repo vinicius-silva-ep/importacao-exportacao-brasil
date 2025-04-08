@@ -6,6 +6,10 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from config import DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASSWORD
 
+from logger import setup_logger
+
+# Inicializa o logger
+logger = setup_logger()
 
 base_path = os.path.abspath(os.path.dirname(__file__))
 db_path = os.path.join(base_path, "db")
@@ -23,6 +27,10 @@ create_tables = os.path.join(db_path, "create_tables.sql")
 
 
 def db_operations():
+    logger.info(
+        "Beginning database operations...",
+        extra={"table": "imp_exp_br", "step": "db operations"},
+    )    
     try:
         connection = psycopg2.connect(
             host=DB_HOST,
@@ -31,24 +39,35 @@ def db_operations():
             user=DB_USER,
             password=DB_PASSWORD,
         )
-
-        print("Conexão com o banco realizada com sucesso!")
+        logger.info(
+            "Database connection established successfully!",
+            extra={"table": "imp_exp_br", "step": "db operations"},
+        )          
         cursor = connection.cursor()
 
         cursor.execute(read_sql_file(verify_schema))
         if not cursor.fetchone():
             cursor.execute(read_sql_file(create_schema))
             connection.commit()
-            print("Schema 'imp_exp_br' criado com sucesso.")
+            logger.info(
+                "Schema 'imp_exp_br' created successfully.",
+                extra={"table": "imp_exp_br", "step": "db operations"},
+            )             
 
         cursor.execute(read_sql_file(verify_tables))
         if not cursor.fetchone()[0]:
             cursor.execute(read_sql_file(create_tables))
             connection.commit()
-            print("Tabelas criadas com sucesso.")
+            logger.info(
+                "Tables created successfully.",
+                extra={"table": "imp_exp_br", "step": "db operations"},
+            )                    
 
         cursor.close()
         connection.close()
 
     except Exception as e:
-        print(f"Erro ao se conectar com o banco: {e}")
+        logger.error(
+            f"Failed to connect to the database: {e}",
+            extra={"table": "imp_exp_br", "step": "extract"},
+        )                  

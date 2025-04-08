@@ -25,26 +25,26 @@ class DBHandler(logging.Handler):
         )
         self.cursor = self.conn.cursor()
 
-        # Criar tabela se não existir
+        # Criar table se não existir
         self.create_table()
 
     def create_table(self):
-        """Cria a tabela de logs se ela não existir."""
+        """Creates the new table if not exists"""
         create_table_query = """
         CREATE TABLE IF NOT EXISTS imp_exp_br.logs (
             id SERIAL PRIMARY KEY,
-            data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            tabela VARCHAR(100),
-            etapa VARCHAR(100),
-            tipo_log VARCHAR(50),
-            mensagem TEXT        
+            creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            table_name VARCHAR(100),
+            step VARCHAR(100),
+            log_type VARCHAR(50),
+            message TEXT        
         );
         """
         try:
             self.cursor.execute(create_table_query)
             self.conn.commit()
         except Exception as e:
-            print(f"Erro ao criar tabela de logs: {e}")
+            print(f"Error while creating logs table: {e}")
 
     def emit(self, record):
         try:
@@ -52,29 +52,29 @@ class DBHandler(logging.Handler):
             if record.levelname == "DEBUG":
                 return
 
-            # Extrair a mensagem do log e o nível de log
-            log_mensagem = self.format(record)
-            tipo_log = record.levelname
+            # Extrair a message do log e o nível de log
+            log_message = self.format(record)
+            log_type = record.levelname
 
             # Obter valores personalizados do registro ou usar padrões
-            tabela = getattr(
-                record, "tabela", "default_table"
+            table = getattr(
+                record, "table_name", "imp_exp_br"
             )  # Padrão: "default_table"
-            etapa = getattr(record, "etapa", "default_step")  # Padrão: "default_step"
+            step = getattr(record, "step", "default_step")  # Padrão: "default_step"
 
             # Inserir log no banco de dados
             query = """
-                INSERT INTO imp_exp_br.logs (tipo_log, mensagem, tabela, etapa)
+                INSERT INTO imp_exp_br.logs (log_type, message, table_name, step)
                 VALUES (%s, %s, %s, %s)
             """
-            self.cursor.execute(query, (tipo_log, log_mensagem, tabela, etapa))
+            self.cursor.execute(query, (log_type, log_message, table, step))
             self.conn.commit()
 
         except Exception as e:
-            print(f"Erro ao inserir log no banco de dados: {e}")
+            print(f"Error while inserting into table: {e}")
 
     def close(self):
-        """Fecha a conexão com o banco de dados."""
+        """Closing the connection"""
         self.cursor.close()
         self.conn.close()
         super().close()
