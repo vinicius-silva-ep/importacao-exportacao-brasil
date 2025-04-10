@@ -43,7 +43,7 @@ def main():
         )            
         db_operations()
         logger.info(
-            f"-- 2. Finishing the database operations process --",
+            f"-- 2. Database operations process finished --",
             extra={"table": "imp_exp_br", "step": "general ETL"},
         )         
     except Exception as e:
@@ -61,7 +61,7 @@ def main():
         )        
         load_and_insert_data()
         logger.info(
-            f"-- 3. Finishing data transformation and loading --",
+            f"-- 3. Data transformation and loading finished --",
             extra={"table": "imp_exp_br", "step": "general ETL"},
         )            
     except Exception as e:
