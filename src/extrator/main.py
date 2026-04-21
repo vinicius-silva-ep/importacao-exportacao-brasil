@@ -40,4 +40,4 @@ def extrator():
 
     # Realiza o download de cada arquivo na lista
     for url in urls:
-        download_file(url)
+        download_file(url)     
